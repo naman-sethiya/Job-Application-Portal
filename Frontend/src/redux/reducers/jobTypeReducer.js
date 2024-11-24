@@ -6,6 +6,7 @@ export const loadJobTypeReducer = (state = { jobType: [] }, action) => {
         case JOB_TYPE_LOAD_REQUEST:
             return { loading: true }
         case JOB_TYPE_LOAD_SUCCESS:
+            console.log(action.payload);
             return {
                 loading: false,
                 jobType: action.payload.jobT

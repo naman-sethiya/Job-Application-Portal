@@ -26,6 +26,7 @@ const allJobsType = async (req, res, next) => {
             jobT
         })
     } catch (error) {
+        // console.log(error);
         next(error);
     }
 }

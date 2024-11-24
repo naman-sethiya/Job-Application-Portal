@@ -3,14 +3,12 @@ import { Box, Button, Paper, Typography } from '@mui/material'
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import DownloadIcon from '@mui/icons-material/Download';
 import { useDispatch, useSelector } from 'react-redux';
 import { allJobLoadAction, deleteSingleJobAction } from '../../redux/actions/jobAction';
-
-
+import jsPDF from 'jspdf';
 
 const DashJobs = () => {
-
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -31,6 +29,23 @@ const DashJobs = () => {
         }
     }
 
+    const downloadAppliedUsers = (jobTitle, users) => {
+        const doc = new jsPDF();
+        doc.text(`Applied Users for ${jobTitle}`, 20, 20);
+        
+        let yPosition = 40;
+        if (users && users.length > 0) {
+            users.forEach((user, index) => {
+                doc.text(`${index + 1}. ${user.email}`, 20, yPosition);
+                yPosition += 10;
+            });
+        } else {
+            doc.text('No applicants', 20, yPosition);
+        }
+        
+        doc.save(`${jobTitle}-applicants.pdf`);
+    };
+
     const columns = [
         {
             field: 'title',
@@ -48,7 +63,7 @@ const DashJobs = () => {
             headerName: 'Created By',
             width: 150,
             renderCell: (data) => {
-                return data.row.user ? data.row.user.firstName : ''
+                return data.row.user ? data.row.user.firstName + ' ' + data.row.user.lastName: ''
             }
         },
         {
@@ -73,16 +88,14 @@ const DashJobs = () => {
             headerName: 'Applied Users',
             width: 200,
             renderCell: (data) => (
-                <Box>
-                    {data.row.appliedUsers && data.row.appliedUsers.length > 0
-                        ? data.row.appliedUsers.map((user, index) => (
-                            <Typography key={index} variant="body2">
-                                {user.email}
-                            </Typography>
-                        ))
-                        : "No applicants"
-                    }
-                </Box>
+                <Button 
+                    variant="contained" 
+                    size="small"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => downloadAppliedUsers(data.row.title, data.row.appliedUsers)}
+                >
+                    Download List
+                </Button>
             )
         },
         {
@@ -101,39 +114,35 @@ const DashJobs = () => {
         }
     ];
 
-    console.log(data);
-
-
-
-
     return (
-        <Box >
-
+        <Box>
             <Typography variant="h4" sx={{ color: "white", pb: 3 }}>
                 Jobs list
             </Typography>
             <Box sx={{ pb: 2, display: "flex", justifyContent: "right" }}>
-                <Button variant='contained' color="success" startIcon={<AddIcon />}> <Link style={{ color: "white", textDecoration: "none" }} to="/admin/job/create">Create Job</Link></Button>
+                <Button variant='contained' color="success" startIcon={<AddIcon />}>
+                    <Link style={{ color: "white", textDecoration: "none" }} to="/admin/job/create">Create Job</Link>
+                </Button>
             </Box>
-            <Paper sx={{ bgcolor: "secondary.midNightBlue" }} >
-
+            <Paper sx={{ bgcolor: "secondary.midNightBlue" }}>
                 <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         getRowId={(row) => row._id}
                         sx={{
-
                             '& .MuiTablePagination-displayedRows': {
                                 color: 'black',
                             },
-                            color: 'black',
+                            '& .MuiDataGrid-columnHeaders': {
+                                color: 'black'
+                            },
                             [`& .${gridClasses.row}`]: {
                                 bgcolor: (theme) =>
-                                    theme.palette.secondary.main
+                                    theme.palette.secondary.main,
+                                color: 'white'
                             },
                             button: {
                                 color: '#ffffff'
                             }
-
                         }}
                         rows={data}
                         columns={columns}
@@ -143,9 +152,8 @@ const DashJobs = () => {
                     />
                 </Box>
             </Paper>
-
         </Box>
     )
 }
 
-export default DashJobs
+export default DashJobs;

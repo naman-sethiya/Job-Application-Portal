@@ -121,7 +121,7 @@ const showJobs = async (req, res, next) => {
 const allJobs = async (req, res) => {
 
     try {
-        const jobs = await Job.find().populate('jobType', 'jobTypeName').populate('user', 'firstName').populate('appliedUsers', 'email');
+        const jobs = await Job.find().populate('jobType', 'jobTypeName').populate('user').populate('appliedUsers', 'email');
         res.status(200).json({
             success: true,
             jobs
