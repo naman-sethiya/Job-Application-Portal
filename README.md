@@ -47,10 +47,10 @@ Configure `.env` files for database connection and server secrets.
 ## 🎥 Demo Videos
 
 ### User Functionality
-[![Admin Demo]()](https://youtu.be/sdesWLqpMLg)
+[![User Demo]()](https://youtu.be/sdesWLqpMLg)
 
 ### Admin Functionality
-[![User Demo]()](https://youtu.be/DN2jhTMLQ_w)
+[![Admin Demo]()](https://youtu.be/DN2jhTMLQ_w)
 
 ## Folder Structure
 
