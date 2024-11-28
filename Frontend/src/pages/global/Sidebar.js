@@ -30,7 +30,7 @@ const SidebarAdm = () => {
     }, []);
 
     //log out 
-    const logOut = () => {
+    const logOut = async() => {
         dispatch(userLogoutAction());
         window.location.reload(true);
         setTimeout(() => {
