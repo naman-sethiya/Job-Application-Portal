@@ -46,7 +46,7 @@ function Navbar() {
     };
 
     //log out user
-    const logOutUser = () => {
+    const logOutUser = async() => {
         dispatch(userLogoutAction());
         window.location.reload(true);
         setTimeout(() => {
